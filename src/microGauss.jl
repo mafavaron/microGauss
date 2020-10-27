@@ -7,6 +7,7 @@ miniGauss.jl:
 
 # Main program for 'microGauss' toy Gaussian dispersion model.
 
+# Get command line parameters
 num_args = length(ARGS)
 if num_args != 1
     println("microGauss.jl - Toy Gaussian dispersion model")
@@ -17,7 +18,8 @@ if num_args != 1
     println("")
     println("This is open-source software, covered by the MIT License")
     println("")
-    println("Written by: Patrizia Facaron")
+    println("Written by: Patrizia Favaron")
     println("")
     exit()
 end
+ini_file = ARGS[1]
