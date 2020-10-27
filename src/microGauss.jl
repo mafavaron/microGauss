@@ -7,6 +7,8 @@ miniGauss.jl:
 
 # Main program for 'microGauss' toy Gaussian dispersion model.
 
+using ConfParser
+
 # Get command line parameters
 num_args = length(ARGS)
 if num_args != 1
@@ -23,3 +25,7 @@ if num_args != 1
     exit()
 end
 ini_file = ARGS[1]
+
+# Get configuration data
+config = ConfParse(ini_file)
+parse_conf!(config)
