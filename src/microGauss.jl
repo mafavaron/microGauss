@@ -8,6 +8,8 @@ miniGauss.jl:
 # Main program for 'microGauss' toy Gaussian dispersion model.
 
 using ConfParser
+using DataFrames
+using CSV
 
 # Get command line parameters
 num_args = length(ARGS)
@@ -48,4 +50,12 @@ try
 catch
     println("miniGauss:: Error: Configuration file is missing or invalid")
     exit(1)
+end
+
+# Get meteo data as a data-frame
+try
+    dfMeteo = CSV.read(sMeteo)
+catch
+    println("miniGauss:: Error: Meteo file is missing or invalid")
+    exit(2)
 end
