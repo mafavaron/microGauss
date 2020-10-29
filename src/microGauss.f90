@@ -8,8 +8,11 @@ program microGauss
 
     implicit none
     
+    use config
+    
     ! Locals
     integer             :: iRetCode
     character(len=256)  :: sIniFile
+    type(ConfigType)    :: tCfg
 
 end program microGauss
