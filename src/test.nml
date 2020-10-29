@@ -21,5 +21,5 @@
 /
 
 &Meteorology
-    MeteoFile = "testMet.csv"
+    sMeteo = "testMet.csv"
 /
