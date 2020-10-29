@@ -1,3 +1,5 @@
+#!/Applications/Julia-1.5.app/Contents/Resources/julia/bin/julia
+
 #=
 miniGauss.jl:
 - Julia version: 1.5.1
