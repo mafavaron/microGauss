@@ -42,8 +42,28 @@ contains
         integer                         :: iRetCode
         
         ! Locals
-        integer :: iErrCode
-        integer :: iLUN
+        integer             :: iErrCode
+        integer             :: iLUN
+        character(len=256)  :: sRunName
+        character(len=256)  :: sOutFile
+        real(8)             :: rX0
+        real(8)             :: rY0
+        integer             :: iNx
+        integer             :: iNy
+        real(8)             :: rDxy
+        real(8)             :: rXe
+        real(8)             :: rYe
+        real                :: rHe
+        real                :: rDe
+        real                :: rVe
+        real                :: rTe
+        character(len=256)  :: sMeteo
+        
+        ! Namelists
+        namelist /General/ sRunName, sOutFile
+        namelist /Receptors/ rX0, rY0, iNx, iNy, rDxy
+        namelist /Emission/ rXe, rYe, rHe, rDe, rVe, rTe
+        namelist /Meteorology/ sMeteo
         
         ! Assume success (will falsify on failure)
         iRetCode = 0
