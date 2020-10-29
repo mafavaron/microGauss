@@ -11,7 +11,7 @@
     rDXY =      50.0d0
 /
 
-6Emission
+&Emission
     rXe  =  502500.0,
     rYe  = 5002500.0,
     rHe  =      25.0,
