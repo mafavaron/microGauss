@@ -68,13 +68,49 @@ contains
         ! Assume success (will falsify on failure)
         iRetCode = 0
         
+        ! Gather configuration data from file
         open(newunit=iLUN, status='old', action='read', iostat=iErrCode)
         if(iErrCode /= 0) then
             iRetCode = 1
             return
         end if
-        
+        read(iLUN, nml=General, iostat=iErrCode)
+        if(iErrCode /= 0) then
+            iRetCode = 2
+            return
+        end if
+        read(iLUN, nml=Receptors, iostat=iErrCode)
+        if(iErrCode /= 0) then
+            iRetCode = 3
+            return
+        end if
+        read(iLUN, nml=Emission, iostat=iErrCode)
+        if(iErrCode /= 0) then
+            iRetCode = 4
+            return
+        end if
+        read(iLUN, nml=Meteorology, iostat=iErrCode)
+        if(iErrCode /= 0) then
+            iRetCode = 5
+            return
+        end if
         close(iLUN)
+        
+        ! Transfer the data read to configuration object
+        this % sRunName = sRunName
+        this % sOutFile = sOutFile
+        this % rX0      = rX0
+        this % rY0      = rY0
+        this % iNx      = iNx
+        this % iNy      = iNy
+        this % rDxy     = rDxy
+        this % rXe      = rXe
+        this % rYe      = rYe
+        this % rHe      = rHe
+        this % rDe      = rDe
+        this % rVe      = rVe
+        this % rTe      = rTe
+        this % sMeteo   = sMeteo
         
     end function get
 
