@@ -6,9 +6,9 @@
 !
 program microGauss
 
-    implicit none
-    
     use config
+    
+    implicit none
     
     ! Locals
     integer             :: iRetCode
