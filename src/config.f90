@@ -69,7 +69,7 @@ contains
         iRetCode = 0
         
         ! Gather configuration data from file
-        open(newunit=iLUN, status='old', action='read', iostat=iErrCode)
+        open(newunit=iLUN, file=sIniFile, status='old', action='read', iostat=iErrCode)
         if(iErrCode /= 0) then
             iRetCode = 1
             return
