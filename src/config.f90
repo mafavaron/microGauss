@@ -28,6 +28,8 @@ module Config
         real                :: rTe
         ! Meteo data
         character(len=256)  :: sMeteo
+    contains
+        procedure           :: get
     end type ConfigType
 
 end module Config
