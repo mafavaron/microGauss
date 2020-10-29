@@ -59,7 +59,12 @@ module config
         rDe      = get(ini, "Emission", "De", missing)
         rTe      = get(ini, "Emission", "Te", missing)
         sMeteo   = get(ini, "Meteorology", "MeteoFile", missing)
-        println(sMeteo)
+        
+        return Config(
+        	sRunName, sOutFile,
+        	rX0, rY0, iNx, iNy, rDxy,
+        	rXe, rYe, rHe, rVe, rDe, rTe, sMeteo
+        )
 
     end
 
