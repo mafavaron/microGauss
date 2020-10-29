@@ -31,5 +31,31 @@ module Config
     contains
         procedure           :: get
     end type ConfigType
+    
+contains
+
+    function get(this, sIniFile) result(iRetCode)
+    
+        ! Routine arguments
+        class(ConfigType), intent(out)  :: this
+        character(len=*), intent(in)    :: sIniFile
+        integer                         :: iRetCode
+        
+        ! Locals
+        integer :: iErrCode
+        integer :: iLUN
+        
+        ! Assume success (will falsify on failure)
+        iRetCode = 0
+        
+        open(newunit=iLUN, status='old', action='read', iostat=iErrCode)
+        if(iErrCode /= 0) then
+            iRetCode = 1
+            return
+        end if
+        
+        close(iLUN)
+        
+    end function get
 
 end module Config
