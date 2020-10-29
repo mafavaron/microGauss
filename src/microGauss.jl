@@ -9,9 +9,9 @@ miniGauss.jl:
 
 # Main program for 'microGauss' toy Gaussian dispersion model.
 
-using ConfParser
 using DataFrames
 using CSV
+using config
 
 # Get command line parameters
 num_args = length(ARGS)
@@ -29,6 +29,9 @@ if num_args != 1
     exit()
 end
 ini_file = ARGS[1]
+
+# Read configuration from its file
+cfg = getConfig(ini_file)
 
 # Get meteo data as a data-frame
 try
