@@ -18,6 +18,16 @@ module Config
         real(8)             :: rY0
         integer             :: iNx
         integer             :: iNy
+        real(8)             :: rDxy
+        ! Emission
+        real(8)             :: rXe
+        real(8)             :: rYe
+        real                :: rHe
+        real                :: rDe
+        real                :: rVe
+        real                :: rTe
+        ! Meteo data
+        character(len=256)  :: sMeteo
     end type ConfigType
 
 end module Config
