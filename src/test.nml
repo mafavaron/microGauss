@@ -17,7 +17,7 @@
     rHe  =      25.0,
     rDe  =       1.5,
     rTe  =     400.0,
-    rVe  =      10.0,
+    rVe  =      10.0
 /
 
 &Meteorology
