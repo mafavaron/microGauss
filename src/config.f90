@@ -14,20 +14,23 @@ module Config
         character(len=256)  :: sRunName
         character(len=256)  :: sOutFile
         ! Receptor grid
-        real(8)             :: rX0
-        real(8)             :: rY0
-        integer             :: iNx
-        integer             :: iNy
-        real(8)             :: rDxy
+        real(8)             :: rX0  ! X coordinate of SW receptor in grid (read)
+        real(8)             :: rY0  ! Y coordinate of SW receptor in grid (read)
+        real(8)             :: rX1  ! X coordinate of NE receptor in grid (computed)
+        real(8)             :: rY1  ! Y coordinate of NE receptor in grid (computed)
+        integer             :: iNx  ! Number of receptors along X direction (read)
+        integer             :: iNy  ! Number of receptors along Y direction (read)
+        real(8)             :: rDxy ! Grid spacing (read)
         ! Emission
-        real(8)             :: rXe
-        real(8)             :: rYe
-        real                :: rHe
-        real                :: rDe
-        real                :: rVe
-        real                :: rTe
+        real(8)             :: rXe  ! Source X coordinate (read)
+        real(8)             :: rYe  ! Source Y coordinate (read)
+        real                :: rHe  ! Height of stack tip above ground (read)
+        real                :: rDe  ! Stack tip diameter (read)
+        real                :: rVe  ! Initial speed of exhausts at stack tip (read)
+        real                :: rTe  ! Initial temperature of exhaust at stack tip (read)
+        logical             :: lIn  ! .true. if source is within receptor grid (computed)
         ! Meteo data
-        character(len=256)  :: sMeteo
+        character(len=256)  :: sMeteo   ! Name of meteo input file
     contains
         procedure           :: get
         procedure           :: complete
@@ -126,6 +129,12 @@ contains
         
         ! Assume success (will falsify on failure
         iRetCode = 0
+        
+        ! Compute the configuration's missing elements
+        this % rX1 = this % rX0 + (this % iNx - 1) * this % rDxy
+        this % rY1 = this % rY0 + (this % iNy - 1) * this % rDxy
+        this % lIn = (this % rX0 <= this % rXe .and. this % rXe <= this % rX1) .and. &
+                     (this % rY0 <= this % rYe .and. this % rYe <= this % rY1)
         
     end function complete
 
