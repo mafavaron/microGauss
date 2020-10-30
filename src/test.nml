@@ -1,0 +1,25 @@
+&General
+    sRunName = "Test run 0",
+    sOutFile = "test.01"
+/
+
+&Receptors
+    rX0  =  500000.0d0,
+    rY0  = 5000000.0d0,
+    iNX  =     101,
+    iNY  =     101,
+    rDXY =      50.0d0
+/
+
+&Emission
+    rXe  =  502500.0,
+    rYe  = 5002500.0,
+    rHe  =      25.0,
+    rDe  =       1.5,
+    rTe  =     400.0,
+    rVe  =      10.0
+/
+
+&Meteorology
+    sMeteo = "testMet.csv"
+/
