@@ -30,6 +30,7 @@ module Config
         character(len=256)  :: sMeteo
     contains
         procedure           :: get
+        procedure           :: complete
     end type ConfigType
     
 contains
@@ -113,5 +114,19 @@ contains
         this % sMeteo   = sMeteo
         
     end function get
+    
+    
+    function complete(this) result(iRetCode)
+    
+        ! Routine arguments
+        class(ConfigType), intent(inout)    :: this
+        integer                             :: iRetCode
+        
+        ! Locals
+        
+        ! Assume success (will falsify on failure
+        iRetCode = 0
+        
+    end function complete
 
 end module Config
