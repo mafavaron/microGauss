@@ -32,11 +32,24 @@ program microGauss
     end if
     call get_command_argument(1, sIniFile)
     
-    ! Get configuration
+    ! Get configuration data
     iRetCode = tCfg % get(sIniFile)
     if(iRetCode /= 0) then
         print *, "microGauss:: error: Invalid configuration - Ret.code = ", iRetCode
         stop
     end if
+    
+    ! Complete and check configuration
+    iRetCode = tCfg % complete()
+    if(iRetCode == 1) then
+        print *, "microGauss:: error: Source is outside the receptors grid"
+        stop
+    elseif(iRetCode == 2) then
+        print *, "microGauss:: error: Receptors gridis empty"
+        stop
+    end if
+    
+    ! Leave
+    print *, "*** End Job ***"
 
 end program microGauss
