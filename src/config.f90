@@ -135,6 +135,16 @@ contains
         this % rY1 = this % rY0 + (this % iNy - 1) * this % rDxy
         this % lIn = (this % rX0 <= this % rXe .and. this % rXe <= this % rX1) .and. &
                      (this % rY0 <= this % rYe .and. this % rYe <= this % rY1)
+                     
+        ! Decide whether the completion was successful
+        if(.not.this % lIn) then
+            iRetCode = 1
+            return
+        end if
+        if(this % rX1 <= this % rX0 .or. this % rY1 <= this % rY0) then
+            iRetCode = 2
+            return
+        end if
         
     end function complete
 
