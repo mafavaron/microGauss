@@ -54,13 +54,14 @@ contains
             iRetCode = 2
             return
         end if
-        if(allocated(this % ivTimeStamp)) deallocate()this % ivTimeStamp)
-        if(allocated(this % rvVel))       deallocate()this % rvVel)
-        if(allocated(this % rvDir))       deallocate()this % rvDir)
-        if(allocated(this % rvTemp))      deallocate()this % rvTemp)
-        if(allocated(this % rvUstar))     deallocate()this % rvUstar)
-        if(allocated(this % rvH0))        deallocate()this % rvH0)
-        if(allocated(this % rvZi))        deallocate()this % rvZi)
+        if(allocated(this % ivTimeStamp)) deallocate(this % ivTimeStamp)
+        if(allocated(this % rvVel))       deallocate(this % rvVel)
+        if(allocated(this % rvDir))       deallocate(this % rvDir)
+        if(allocated(this % rvTemp))      deallocate(this % rvTemp)
+        if(allocated(this % rvUstar))     deallocate(this % rvUstar)
+        if(allocated(this % rvH0))        deallocate(this % rvH0)
+        if(allocated(this % rvZi))        deallocate(this % rvZi)
+        
         
     end function get
 
