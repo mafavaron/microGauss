@@ -61,7 +61,13 @@ contains
         if(allocated(this % rvUstar))     deallocate(this % rvUstar)
         if(allocated(this % rvH0))        deallocate(this % rvH0)
         if(allocated(this % rvZi))        deallocate(this % rvZi)
-        
+        allocate(this % ivTimeStamp(iNumLines))
+        allocate(this % rvVel(iNumLines))
+        allocate(this % rvDir(iNumLines))
+        allocate(this % rvTemp(iNumLines))
+        allocate(this % rvUstar(iNumLines))
+        allocate(this % rvH0(iNumLines))
+        allocate(this % rvZi(iNumLines))
         
     end function get
 
