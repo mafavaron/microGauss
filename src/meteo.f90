@@ -12,10 +12,12 @@ module Meteo
         integer, dimension(:), allocatable  :: ivTimeStamp  ! Time stamp (read)
         real, dimension(:), allocatable     :: rvVel        ! Horizontal wind speed (m/s, read)
         real, dimension(:), allocatable     :: rvDir        ! Horizontal wind direction (°, read)
-        real, dimension(:), allocatable     :: rvTemp       ! Air temperature (°C, read)
+        real, dimension(:), allocatable     :: rvTa         ! Air temperature (K, read)
         real, dimension(:), allocatable     :: rvUstar      ! Friction velocity (m/s, read)
         real, dimension(:), allocatable     :: rvH0         ! Turbulent sensible heat flux (W/m2, read)
         real, dimension(:), allocatable     :: rvZi         ! Mixing height (m, read)
+        real, dimension(:), allocatable     :: rvL          ! Obukhov length (m, computed)
+        real, dimension(:), allocatable     :: rvWs         ! Deardoff velocity (m/s, read)
     contains
         procedure   :: get
     end type MeteoType
@@ -34,6 +36,8 @@ contains
         integer             :: iLUN
         integer             :: iNumLines
         character(len=80)   :: sBuffer
+        integer             :: iLine
+        integer             :: iYear, iMonth, iDay, iHour, iMinute, iSecond
         
         ! Assume success (will falsify on failure)
         iRetCode = 0
@@ -57,17 +61,44 @@ contains
         if(allocated(this % ivTimeStamp)) deallocate(this % ivTimeStamp)
         if(allocated(this % rvVel))       deallocate(this % rvVel)
         if(allocated(this % rvDir))       deallocate(this % rvDir)
-        if(allocated(this % rvTemp))      deallocate(this % rvTemp)
+        if(allocated(this % rvTa))        deallocate(this % rvTa)
         if(allocated(this % rvUstar))     deallocate(this % rvUstar)
         if(allocated(this % rvH0))        deallocate(this % rvH0)
         if(allocated(this % rvZi))        deallocate(this % rvZi)
+        if(allocated(this % rvL))         deallocate(this % rvL)
+        if(allocated(this % rvWs))        deallocate(this % rvWs)
         allocate(this % ivTimeStamp(iNumLines))
         allocate(this % rvVel(iNumLines))
         allocate(this % rvDir(iNumLines))
-        allocate(this % rvTemp(iNumLines))
+        allocate(this % rvTa(iNumLines))
         allocate(this % rvUstar(iNumLines))
         allocate(this % rvH0(iNumLines))
         allocate(this % rvZi(iNumLines))
+        allocate(this % rvL(iNumLines))
+        allocate(this % rvWs(iNumLines))
+        
+        ! Read actual data
+        rewind(iLUN)
+        read(iLUN, "(a)") sBuffer
+        do iLine = 1, iNumLines
+            read(iLUN, "(a)") sBuffer
+            read(sBuffer(1:19), "(i4,5(1x,i2))", iostat=iErrCode) iYear, iMonth, iDay, iHour, iMinute, iSecond
+            if(iErrCode /= 0) then
+                iRetCode = 3
+                close(iLUN)
+                return
+            end if
+            read(sBuffer(21:), *, iostat=iErrCode) &
+                this % rvVel(iLine), &
+                this % rvDir(iLine), &
+                this % rvTa(iLine), &
+                this % rvUstar(iLine), &
+                this % rvH0(iLine), &
+                this % rvZi(iLine)
+        end do
+        
+        ! Compute the remaining columns
+        this % rvL = -305.904 * this % rvUstar**3 * this % rvTa / this % rvH0
         
     end function get
 
