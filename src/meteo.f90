@@ -99,6 +99,11 @@ contains
         
         ! Compute the remaining columns
         this % rvL = -305.904 * this % rvUstar**3 * this % rvTa / this % rvH0
+        where(this % rvH0 > 0.)
+            this % rvWs = (0.0081725 * this % rvH0 * this % rvZi / this % rvTa) ** (1./3.)
+        elsewhere
+            this % rvWs = 0.
+        endwhere
         
     end function get
 
