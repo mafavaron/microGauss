@@ -16,7 +16,7 @@ module Meteo
         real, dimension(:), allocatable     :: rvUstar      ! Friction velocity (m/s, read)
         real, dimension(:), allocatable     :: rvH0         ! Turbulent sensible heat flux (W/m2, read)
         real, dimension(:), allocatable     :: rvZi         ! Mixing height (m, read)
-        real, dimension(:), allocatable     :: rvL          ! Obukhov length (m, computed)
+        real, dimension(:), allocatable     :: rvLm1        ! Reciprocal of Obukhov length (m**-1, computed)
         real, dimension(:), allocatable     :: rvWs         ! Deardoff velocity (m/s, read)
     contains
         procedure   :: get
@@ -65,7 +65,7 @@ contains
         if(allocated(this % rvUstar))     deallocate(this % rvUstar)
         if(allocated(this % rvH0))        deallocate(this % rvH0)
         if(allocated(this % rvZi))        deallocate(this % rvZi)
-        if(allocated(this % rvL))         deallocate(this % rvL)
+        if(allocated(this % rvLm1))       deallocate(this % rvLm1)
         if(allocated(this % rvWs))        deallocate(this % rvWs)
         allocate(this % ivTimeStamp(iNumLines))
         allocate(this % rvVel(iNumLines))
@@ -74,7 +74,7 @@ contains
         allocate(this % rvUstar(iNumLines))
         allocate(this % rvH0(iNumLines))
         allocate(this % rvZi(iNumLines))
-        allocate(this % rvL(iNumLines))
+        allocate(this % rvLm1(iNumLines))
         allocate(this % rvWs(iNumLines))
         
         ! Read actual data
@@ -98,7 +98,7 @@ contains
         end do
         
         ! Compute the remaining columns
-        this % rvL = -305.904 * this % rvUstar**3 * this % rvTa / this % rvH0
+        this % rvLm1 = -this % rvH0 / (305.904 * this % rvUstar**3 * this % rvTa)
         where(this % rvH0 > 0.)
             this % rvWs = (0.0081725 * this % rvH0 * this % rvZi / this % rvTa) ** (1./3.)
         elsewhere
