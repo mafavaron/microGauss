@@ -18,6 +18,8 @@ module Meteo
         real, dimension(:), allocatable     :: rvZi         ! Mixing height (m, read)
         real, dimension(:), allocatable     :: rvLm1        ! Reciprocal of Obukhov length (m**-1, computed)
         real, dimension(:), allocatable     :: rvWs         ! Deardoff velocity (m/s, read)
+        real, dimension(:), allocatable     :: rvSigmaU     ! Horizontal natural sigma (m/s, computed)
+        real, dimension(:), allocatable     :: rvSigmaW     ! Vertical natural sigma (m/s, computed)
     contains
         procedure   :: get
     end type MeteoType
