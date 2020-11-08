@@ -147,5 +147,40 @@ contains
         end if
         
     end function estimateSigmaY
+    
+    
+    function estimateSigmaZ( &
+        this, &
+        iStep, &
+        rX, &
+        rSigmaZ &
+    ) result(iRetCode)
+    
+        ! Routine arguments
+        class(MeteoType), intent(in)    :: this
+        integer, intent(in)             :: iStep
+        real, intent(in)                :: rX
+        real, intent(out)               :: rSigmaZ
+        integer                         :: iRetCode
+        
+        ! Locals
+        
+        ! Assume success (will falsify on failure)
+        iRetCode = 0
+        
+        ! Validate parameters
+        if(iStep < 1 .or. iStep > size(this % ivTimeStamp)) then
+            iRetCode = 1
+            return
+        end if
+        
+        ! Compute the Sigma(Y)
+        if(rX <= 0.) then
+            rSigmaZ = 0.
+        else
+            rSigmaZ = 
+        end if
+        
+    end function estimateSigmaZ
 
 end module Meteo
