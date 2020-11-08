@@ -11,17 +11,17 @@ module Meteo
     type MeteoType
         integer, dimension(:), allocatable  :: ivTimeStamp  ! Time stamp (read)
         real, dimension(:), allocatable     :: rvVel        ! Horizontal wind speed (m/s, read)
-        real, dimension(:), allocatable     :: rvDir        ! Horizontal wind direction (°, read)
+        real, dimension(:), allocatable     :: rvDir        ! Horizontal wind direction (Â°, read)
         real, dimension(:), allocatable     :: rvTa         ! Air temperature (K, read)
         real, dimension(:), allocatable     :: rvUstar      ! Friction velocity (m/s, read)
         real, dimension(:), allocatable     :: rvH0         ! Turbulent sensible heat flux (W/m2, read)
         real, dimension(:), allocatable     :: rvZi         ! Mixing height (m, read)
         real, dimension(:), allocatable     :: rvLm1        ! Reciprocal of Obukhov length (m**-1, computed)
         real, dimension(:), allocatable     :: rvWs         ! Deardoff velocity (m/s, read)
-        real, dimension(:), allocatable     :: rvSigmaU     ! Horizontal natural sigma (m/s, computed)
-        real, dimension(:), allocatable     :: rvSigmaW     ! Vertical natural sigma (m/s, computed)
     contains
         procedure   :: get
+        procedure   :: estimateSigmaY
+        procedure   :: estimateSigmaZ
     end type MeteoType
     
 contains
@@ -99,7 +99,7 @@ contains
                 this % rvZi(iLine)
         end do
         
-        ! Compute the remaining columns
+        ! Compute basic turbulence indices
         this % rvLm1 = -this % rvH0 / (305.904 * this % rvUstar**3 * this % rvTa)
         where(this % rvH0 > 0.)
             this % rvWs = (0.0081725 * this % rvH0 * this % rvZi / this % rvTa) ** (1./3.)
@@ -108,5 +108,28 @@ contains
         endwhere
         
     end function get
+    
+    
+    function estimateSigmaY( &
+        this, &     ! Current meteo set
+        iStep, &    ! Current step index
+        rVel, &     ! Wind speed (m/s)
+        rX, &       ! Downwind distance (m)
+        rSigmaY     ! Output value of Sigma(Y) (m)
+    ) result(iRetCode)
+    
+        ! Routine arguments
+        class(MeteoType), intent(in)    :: this
+        integer, intent(in)             :: iStep
+        real, intent(in)                :: rVel
+        real, intent(in)                :: rX
+        real, intent(out)               :: rSigmaY
+        
+        ! Assume success (will falsify on failure)
+        iRetCode = 0
+        
+        ! Validate parameters
+        
+    end function estimateSigmaY
 
 end module Meteo
