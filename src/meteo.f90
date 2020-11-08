@@ -17,7 +17,7 @@ module Meteo
         real, dimension(:), allocatable     :: rvH0         ! Turbulent sensible heat flux (W/m2, read)
         real, dimension(:), allocatable     :: rvZi         ! Mixing height (m, read)
         real, dimension(:), allocatable     :: rvLm1        ! Reciprocal of Obukhov length (m**-1, computed)
-        real, dimension(:), allocatable     :: rvWs         ! Deardoff velocity (m/s, read)
+        real, dimension(:), allocatable     :: rvWstar      ! Deardoff velocity (m/s, read)
     contains
         procedure   :: get
         procedure   :: estimateSigmaY
@@ -68,7 +68,7 @@ contains
         if(allocated(this % rvH0))        deallocate(this % rvH0)
         if(allocated(this % rvZi))        deallocate(this % rvZi)
         if(allocated(this % rvLm1))       deallocate(this % rvLm1)
-        if(allocated(this % rvWs))        deallocate(this % rvWs)
+        if(allocated(this % rvWstar))     deallocate(this % rvWstar)
         allocate(this % ivTimeStamp(iNumLines))
         allocate(this % rvVel(iNumLines))
         allocate(this % rvDir(iNumLines))
@@ -77,7 +77,7 @@ contains
         allocate(this % rvH0(iNumLines))
         allocate(this % rvZi(iNumLines))
         allocate(this % rvLm1(iNumLines))
-        allocate(this % rvWs(iNumLines))
+        allocate(this % rvWstar(iNumLines))
         
         ! Read actual data
         rewind(iLUN)
@@ -102,9 +102,9 @@ contains
         ! Compute basic turbulence indices
         this % rvLm1 = -this % rvH0 / (305.904 * this % rvUstar**3 * this % rvTa)
         where(this % rvH0 > 0.)
-            this % rvWs = (0.0081725 * this % rvH0 * this % rvZi / this % rvTa) ** (1./3.)
+            this % rvWstar = (0.0081725 * this % rvH0 * this % rvZi / this % rvTa) ** (1./3.)
         elsewhere
-            this % rvWs = 0.
+            this % rvWstar = 0.
         endwhere
         
     end function get
@@ -113,22 +113,38 @@ contains
     function estimateSigmaY( &
         this, &     ! Current meteo set
         iStep, &    ! Current step index
-        rVel, &     ! Wind speed (m/s)
         rX, &       ! Downwind distance (m)
-        rSigmaY     ! Output value of Sigma(Y) (m)
+        rSigmaY &   ! Output value of Sigma(Y) (m)
     ) result(iRetCode)
     
         ! Routine arguments
         class(MeteoType), intent(in)    :: this
         integer, intent(in)             :: iStep
-        real, intent(in)                :: rVel
         real, intent(in)                :: rX
         real, intent(out)               :: rSigmaY
+        integer                         :: iRetCode
         
         ! Assume success (will falsify on failure)
         iRetCode = 0
         
         ! Validate parameters
+        if(iStep < 1 .or. iStep > size(this % ivTimeStamp)) then
+            iRetCode = 1
+            return
+        end if
+        
+        ! Compute the Sigma(Y)
+        if(rX <= 0.) then
+            rSigmaY = 0.
+        else
+            rSigmaY = (rX / this % rvVel(iStep)) * &
+                      sqrt( &
+                        this % rvUstar(iStep) ** 2 + &
+                        0.25 * this % rvWstar(iStep) ** 2 / ( &
+                            1. + 0.9 * rX * this % rvWstar(iStep) / (this % rvZi(iStep) * this % rvVel(iStep)) &
+                        ) &
+                      )
+        end if
         
     end function estimateSigmaY
 
