@@ -153,6 +153,7 @@ contains
         this, &
         iStep, &
         rX, &
+        rHm, &
         rSigmaZ &
     ) result(iRetCode)
     
@@ -160,10 +161,15 @@ contains
         class(MeteoType), intent(in)    :: this
         integer, intent(in)             :: iStep
         real, intent(in)                :: rX
+        real, intent(in)                :: rHm
         real, intent(out)               :: rSigmaZ
         integer                         :: iRetCode
         
         ! Locals
+        real    :: rWstar
+        real    :: rSigmaC2_1
+        real    :: rSigmaC2_2
+        real    :: rSigmaC2_3
         
         ! Assume success (will falsify on failure)
         iRetCode = 0
@@ -174,11 +180,17 @@ contains
             return
         end if
         
+        ! Transfer vector data to scalars (just for human use: so the cumbersome
+        ! formulae become a bit better
+        rWstar = this % rvWstar(iStep)
+        rZi    = this % rvZi(iStep)
+        rVel   = this % rvVel(iStep)
+        
         ! Compute the Sigma(Y)
         if(rX <= 0.) then
             rSigmaZ = 0.
         else
-            rSigmaZ = 
+            rSigmaC2_1 = 1.54 * rWstar**2 * (rHm / rZi)**2./3. * (rX/rVel)**2
         end if
         
     end function estimateSigmaZ
