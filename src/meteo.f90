@@ -167,6 +167,8 @@ contains
         
         ! Locals
         real    :: rWstar
+        real    :: rZi
+        real    :: rVel
         real    :: rSigmaC2_1
         real    :: rSigmaC2_2
         real    :: rSigmaC2_3
@@ -191,6 +193,8 @@ contains
             rSigmaZ = 0.
         else
             rSigmaC2_1 = 1.54 * rWstar**2 * (rHm / rZi)**2./3. * (rX/rVel)**2
+            rSigmaC2_2 = (0.83*rWstar * rZi**(-1./3.) * rX / rVel + 0.33*rHm**(2./3.))**3
+            rSigmaC2_3 = (0.58*rWstar * rX / rVel + 0.231*rHm**(2./3.) -0.05*rZi)**2
         end if
         
     end function estimateSigmaZ
